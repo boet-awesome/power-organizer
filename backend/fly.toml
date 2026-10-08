@@ -1,0 +1,26 @@
+# Template for Fly.io. Change `app` to a unique name, then:
+#   fly launch --no-deploy --copy-config      (from the backend/ folder)
+#   fly volumes create data --size 1
+#   fly secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=... \
+#       VAPID_SUBJECT=mailto:you@example.com ALLOWED_ORIGINS=https://YOURNAME.github.io
+#   fly deploy
+app = "power-organizer-boet"
+primary_region = "sin"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false   # the once-a-minute reminder loop needs it running
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[mounts]]
+  source = "data"
+  destination = "/data"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
